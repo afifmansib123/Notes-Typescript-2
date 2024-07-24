@@ -1,28 +1,31 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Coda, Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { useEffect, useState } from 'react'
-import { CardType } from '@/type/types'
-import Card from '@/components/Card'
+import React from 'react'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
-  const [coffee, changecoffee] = useState([])
+  // changevent 1st event type
 
-  useEffect(()=>{
-    const fetchdata = async() => {
-    const response = await fetch("https://api.sampleapis.com/coffee/hot")
-    if(!response){
-      console.log('error fetching')
-    }
-    const coffee = await response.json()
-    changecoffee(coffee)
-    }
-    fetchdata()
-  },[])
+  const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value)
+  }
+
+  // mouseevent 2nd event type - doesnt have any target value
+
+  const handlesubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    console.log('Searched!')
+  }
+
+  const handledelete = (e : React.MouseEvent<HTMLButtonElement>, id : number) => {
+    e.preventDefault()
+    console.log(`${id} has been clicked to delete`)
+  }
+
 
   return (
     <>
@@ -33,11 +36,52 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {coffee.map((x : CardType)=>( 
-        <h1 className="text-3xl font-bold underline">
-          <Card {...x}/>
-        </h1>
-        ))}
+        <form className="max-w-md mx-auto">
+          <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+              </svg>
+            </div>
+            <input onChange={handlechange} type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
+            <button onClick={handlesubmit} type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+          </div>
+
+          {/* blogs or blocks of paragraphs */}
+
+          <div className="max-w-sm rounded overflow-hidden shadow-lg" id="div1">
+            <p className="w-full">para 1</p>
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
+              <p className="text-gray-700 text-base">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+              </p>
+              <button style={{ color: "red" }} onClick={(e)=>{handledelete(e,1)}}>
+                delete
+              </button>            </div>
+            <div className="px-6 pt-4 pb-2">
+              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+            </div>
+          </div>
+
+          <div className="max-w-sm rounded overflow-hidden shadow-lg" id="div2">
+            <p className="w-full">para 2</p>
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
+              <p className="text-gray-700 text-base">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+              </p>
+              <button style={{ color: "red" }} onClick={(e)=>{handledelete(e,2)}}>
+                delete
+              </button>             </div>
+            <div className="px-6 pt-4 pb-2">
+              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+              <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+            </div>
+          </div>
+        </form>
       </main>
     </>
   )
