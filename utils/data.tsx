@@ -1,4 +1,5 @@
-let Products = [
+import { ProductType } from "@/type/types";
+let Products : ProductType[] = [
   {
     name: "Vintage Camera",
     price: "$200",

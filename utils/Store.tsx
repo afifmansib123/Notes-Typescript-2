@@ -1,33 +1,49 @@
-
-export const InitialState = {
-    cart: {
+import { StateType , CartAction } from "@/type/types";
+export const State : StateType = {
+    Cart: {
         cartItems: [],
     }
 }
 
-export const cartfunction = (state, action) => {
+// the second statetype is for what return type
+
+export const CartFunctionality = (state : StateType , action : CartAction) : StateType => {
     switch (action.type) {
         case "Add_To_Cart":
 
-            // check the request 
-            const RequestedItem = action.payload;
-            // find the requested item in cart
-            const AlreadyInCart = state.cart.cartItems.find((x)=>x.slug === RequestedItem.slug)
-            // if exist , update quantity , otherwise update item object
-            const UpdatedCart = AlreadyInCart 
-            ? state.cart.cartItems.map((x)=>x.slug === RequestedItem.slug ? 
-            {...x, quantity : RequestedItem.quantity} : x )
-            : [...state.cart.cartItems, RequestedItem]
+            const ItemRecieved = action.payload;
+            const CheckInCart = state.Cart.cartItems.find((x) => x.slug === ItemRecieved.slug)
 
+            const UpdatedCart = CheckInCart ?
+                state.Cart.cartItems.map((x) => x.slug === ItemRecieved.slug ?
+                    { ...x, quantity: ItemRecieved.quantity } : x
+                ) : (
+                    [...state.Cart.cartItems, ItemRecieved]
+                )
             return {
                 ...state,
-                cart: {
-                    ...state.cart,
-                    cartItems: UpdatedCart,
+                Cart: {
+                    ...state.Cart,
+                    cartItems: UpdatedCart
                 }
             }
-        default: {
-            return state;
-        }
+        case "ReducefromCar":
+
+            const ItemRecieved1 = action.payload;
+            const CheckInCart1 = state.Cart.cartItems.find((x) => x.slug === ItemRecieved1.slug)
+
+            const UpdatedCart1 = CheckInCart1 ?
+                state.Cart.cartItems.map((x) => x.slug === ItemRecieved1.slug ?
+                    { ...x, quantity: ItemRecieved1.quantity } : x
+                ).filter((x)=>x.quantity> 0) : (
+                    [...state.Cart.cartItems, ItemRecieved1]
+                )
+            return {
+                ...state,
+                Cart: {
+                    ...state.Cart,
+                    cartItems: UpdatedCart1
+                }
+            }
     }
 }
