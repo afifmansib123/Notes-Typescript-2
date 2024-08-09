@@ -1,5 +1,6 @@
-import { StateType , CartAction } from "@/type/types";
-export const State : StateType = {
+import { StateType, CartActionType, CartAction } from "@/type/types";
+import React, { Children, createContext, ReactNode, useReducer } from "react";
+export const State: StateType = {
     Cart: {
         cartItems: [],
     }
@@ -7,7 +8,7 @@ export const State : StateType = {
 
 // the second statetype is for what return type
 
-export const CartFunctionality = (state : StateType , action : CartAction) : StateType => {
+export const CartFunctionality = (state: StateType, action: CartAction): StateType => {
     switch (action.type) {
         case "Add_To_Cart":
 
@@ -35,7 +36,7 @@ export const CartFunctionality = (state : StateType , action : CartAction) : Sta
             const UpdatedCart1 = CheckInCart1 ?
                 state.Cart.cartItems.map((x) => x.slug === ItemRecieved1.slug ?
                     { ...x, quantity: ItemRecieved1.quantity } : x
-                ).filter((x)=>x.quantity> 0) : (
+                ).filter((x) => x.quantity > 0) : (
                     [...state.Cart.cartItems, ItemRecieved1]
                 )
             return {
@@ -46,4 +47,11 @@ export const CartFunctionality = (state : StateType , action : CartAction) : Sta
                 }
             }
     }
+}
+
+export const Statecontext = createContext<{ state: StateType, dispatch: React.Dispatch<CartAction> }>({ state: State, dispatch: () => { } })
+
+export const Stateprovider = ({ children }: { children: ReactNode }) => {
+    const [state, dispatch] = useReducer(CartFunctionality, State)
+    return <Statecontext.Provider value={{ state, dispatch }}>{children}</Statecontext.Provider>
 }
